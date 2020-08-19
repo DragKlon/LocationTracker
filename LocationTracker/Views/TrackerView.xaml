@@ -1,0 +1,48 @@
+﻿<Window x:Class="LocationTracker.TrackerView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LocationTracker"
+        mc:Ignorable="d"
+		ResizeMode="NoResize"
+        Title="TrackerView" Height="772" Width="1040">
+	<Grid>
+		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,10,0,0" Text="Input data file" Name="InputFileLbl" FontSize="14"/>
+		<Button Name="InputFileChooseBtn" Content="Choose file" HorizontalAlignment="Left" Margin="104,6,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="InputFileChooseBtn_Click" FontSize="14"/>
+
+		<TextBox TextWrapping="NoWrap" Margin="10,40,700,660" Name="InputFilePathTxtBox" Height="25" IsEnabled="False" FontSize="14"/>
+		<Button Name="InputFileOpenBtn" Content="Load data" HorizontalAlignment="Left" Margin="337,44,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="InputFileOpenBtn_Click" FontSize="14"/>
+
+		<!--BUG RED BUTTON-->
+		<Button Name="DrawTrajectoryBtn" Content="Draw trajectory" FontSize="16" HorizontalAlignment="Left" Margin="446,15,0,0" VerticalAlignment="Top" Width="132" Height="50" Background="OrangeRed" Click="DrawTrajectoryBtn_Click"/>
+
+		<Button Name="SaveTrajectoryBtn" Content="Save trajectory" HorizontalAlignment="Left" Margin="679,30,0,0" VerticalAlignment="Top" Width="100" Height="25" Click="SaveTrajectoryBtn_Click" FontSize="14"/>
+
+		<Border BorderThickness="2" BorderBrush="Black" Margin="10,80,10,10" >
+			<Canvas Width="1000" Height="640" Name="DrawFieldPanel">
+				<Canvas.Background>
+					<DrawingBrush Viewport="0,0,20,20" ViewportUnits="Absolute" TileMode="Tile">
+						<DrawingBrush.Drawing>
+							<GeometryDrawing Brush="Black">
+								<GeometryDrawing.Geometry>
+									<GeometryGroup FillRule="EvenOdd">
+										<RectangleGeometry Rect="0,0,50,50" />
+										<RectangleGeometry Rect="0,0,49,49" />
+									</GeometryGroup>
+								</GeometryDrawing.Geometry>
+							</GeometryDrawing>
+						</DrawingBrush.Drawing>
+					</DrawingBrush>
+				</Canvas.Background>
+				<Line X1="0" Y1="320" X2="1000" Y2="320" Stroke="Black" x:Name="XAxisLine" StrokeThickness="2" />
+				<Line X1="500" Y1="0" X2="500" Y2="640" Stroke="Black" x:Name="YAxisLine" StrokeThickness="2" />
+				<TextBlock Name="XAxisSectionValueLbl"  Canvas.Left="600" TextWrapping="Wrap" Canvas.Top="335"/>
+				<TextBlock Name="YAxisSectionValueLbl" Canvas.Left="520" TextWrapping="Wrap" Canvas.Top="230"/>
+			</Canvas>
+		</Border>
+		<Button Name="SimulatorRunBtn" Content="SIMULATOR" HorizontalAlignment="Left" Margin="862,30,0,0" VerticalAlignment="Top" Width="100" Height="25" FontSize="14" Background="LightGreen" Click="SimulatorRunBtn_Click" />
+
+
+	</Grid>
+</Window>

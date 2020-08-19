@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5750BCC7-C8F9-44D4-A650-0D48804F0CCC}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>LocationTracker</RootNamespace>
+    <AssemblyName>LocationTracker</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="Views\App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Contracts\DrawablePoint.cs" />
+    <Compile Include="Contracts\InputData.cs" />
+    <Compile Include="Contracts\Interfaces\IGraphicView.cs" />
+    <Compile Include="Contracts\Interfaces\IInputData.cs" />
+    <Compile Include="Contracts\Interfaces\IValidatingView.cs" />
+    <Compile Include="Contracts\Interfaces\IView.cs" />
+    <Compile Include="Contracts\Factories\TrackerFactory.cs" />
+    <Compile Include="Contracts\Interfaces\ILocationValidator.cs" />
+    <Compile Include="Contracts\Interfaces\IPathsValidator.cs" />
+    <Compile Include="Contracts\Interfaces\IValidator.cs" />
+    <Compile Include="Helpers\ConvertingHelper.cs" />
+    <Compile Include="Helpers\Extesnsions\DoubleSquareExtension.cs" />
+    <Compile Include="Helpers\Extesnsions\StringBuilderTrim.cs" />
+    <Compile Include="Helpers\Extesnsions\UIElementCollectionToListExtension.cs" />
+    <Compile Include="Helpers\PublicFields.cs" />
+    <Compile Include="Helpers\Extesnsions\StringToInputDataExtension.cs" />
+    <Compile Include="Helpers\Extesnsions\StringToReceiversExtensions.cs" />
+    <Compile Include="Helpers\TriangulationHelper.cs" />
+    <Compile Include="Helpers\ViewHelper.cs" />
+    <Compile Include="Trackers\TwoDimensialTracker.cs" />
+    <Compile Include="Views\TrackerSimulatorView.xaml.cs">
+      <DependentUpon>TrackerSimulatorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrackerView.xaml.cs">
+      <DependentUpon>TrackerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Validators\DefaultValidator.cs" />
+    <Compile Include="Views\App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Contracts\Interfaces\IPoint.cs" />
+    <Compile Include="Contracts\Interfaces\ITracker.cs" />
+    <Compile Include="Contracts\Interfaces\ITrackerFactory.cs" />
+    <Compile Include="Contracts\Point.cs" />
+    <Compile Include="Contracts\Enums\TrackerTypes.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\TrackerSimulatorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TrackerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
