@@ -88,8 +88,9 @@ namespace LocationTracker.Validators
         {
             var firstLinePositions = receivers.Split(PublicFields.PositionSeparator);
 
-            // If positions number is not correct for number of 2d Points
-            if (firstLinePositions.Count() % 2 != 0)
+            // If positions number is not correct for number of 2d Points 
+            // receivers has 2 positions for X and Y dimensions
+            if (firstLinePositions.Count() != 6)
                 return false;
 
             // If receivers positions are not presented as double

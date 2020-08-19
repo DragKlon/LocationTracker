@@ -105,19 +105,145 @@ namespace LocationTracker.Tests
         {
             string propogationTimeLine = $"0.001{PublicFields.PositionSeparator}0.002{PublicFields.PositionSeparator}0.003";
 
-            var result = ValidatePropagationTimesLine(propogationTimeLine);
+            var result = subject.Object.ValidatePropagationTimesLine(propogationTimeLine);
 
             Assert.IsTrue(result);
         }
 
         [TestMethod]
-        public void ValidatePropagationTimesLine_DataWithInvalidCulture_ReturnsTrue()
+        public void ValidatePropagationTimesLine_LineWithInvalidCulture_ReturnsFalse()
         {
             string propogationTimeLine = $"0,001{PublicFields.PositionSeparator}0,002{PublicFields.PositionSeparator}0,003";
 
-            var result = ValidatePropagationTimesLine(propogationTimeLine);
+            var result = subject.Object.ValidatePropagationTimesLine(propogationTimeLine);
 
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void ValidatePropagationTimesLine_LineWithInvalidContent_ReturnsFalse()
+        {
+            string propogationTimeLine = "invalid data!";
+
+            var result = subject.Object.ValidatePropagationTimesLine(propogationTimeLine);
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ValidatePropagationTimesLine_LineWithTwoTimes_ReturnsFalse()
+        {
+            string propogationTimeLine = $"0.001{PublicFields.PositionSeparator}0.002";
+
+            var result = subject.Object.ValidatePropagationTimesLine(propogationTimeLine);
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ValidateTwoDimensialReceivers_ValidReceviers_ReturnsTrue()
+        {
+            string receivers = $"0.001{PublicFields.PositionSeparator}0.002{PublicFields.PositionSeparator}0.003" +
+                $"{PublicFields.PositionSeparator}0.004{PublicFields.PositionSeparator}0.005{PublicFields.PositionSeparator}0.006";
+
+            var result = subject.Object.ValidateTwoDimensialReceivers(receivers);
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void ValidateTwoDimensialReceivers_InvalidReceviersNumber_ReturnsFalse()
+        {
+            string receivers = $"0.001{PublicFields.PositionSeparator}0.002{PublicFields.PositionSeparator}0.003" +
+                $"{PublicFields.PositionSeparator}0.004";
+
+            var result = subject.Object.ValidateTwoDimensialReceivers(receivers);
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ValidateTwoDimensialReceivers_InvalidCulture_ReturnsFalse()
+        {
+            string receivers = $"0,001{PublicFields.PositionSeparator}0,002{PublicFields.PositionSeparator}0,003" +
+                $"{PublicFields.PositionSeparator}0,004{PublicFields.PositionSeparator}0.005{PublicFields.PositionSeparator}0.006";
+
+            var result = subject.Object.ValidateTwoDimensialReceivers(receivers);
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ValidateTwoDimensialReceivers_InvalidData_ReturnsFalse()
+        {
+            string receivers = "invalid data";
+
+            var result = subject.Object.ValidateTwoDimensialReceivers(receivers);
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ValidateLocation_ForTwoDimensialTracker_ReturnsValidateTwoDimensialLocationResult()
+        {
+            bool twoDimensialValidationResult = true;
+            string location = "location";
+            subject.Setup(m => m.ValidateTwoDimensialLocation(location)).Returns(twoDimensialValidationResult);
+
+            var result = subject.Object.ValidateInputFile(location);
+
+            Assert.AreEqual(twoDimensialValidationResult, result);
+        }
+
+        [TestMethod]
+        public void ValidateLocation_ForThreeDimensialTracker_ReturnsFalse()
+        {
+            string location = "location";
+
+            var result = subject.Object.ValidateInputFile(location, TrackerTypes.ThreeDimensial);
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ValidateTwoDimensialLocation_ValidLocation_ReturnsTrue()
+        {
+            string location = $"0.001{PublicFields.PositionSeparator}0.002";
+
+            var result = subject.Object.ValidateTwoDimensialLocation(location);
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void ValidateTwoDimensialLocation_InvalidLocation_ReturnsFalse()
+        {
+            string location = $"invalid location";
+
+            var result = subject.Object.ValidateTwoDimensialLocation(location);
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ValidateTwoDimensialLocation_LocationWithInvalidCulture_ReturnsFalse()
+        {
+            string location = $"0,001{PublicFields.PositionSeparator}0,002";
+
+            var result = subject.Object.ValidateTwoDimensialLocation(location);
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ValidateTwoDimensialLocation_LocationWithInvalidPositionNumbers_ReturnsFalse()
+        {
+            string location = $"0.001{PublicFields.PositionSeparator}0.002{PublicFields.PositionSeparator}0.003";
+
+            var result = subject.Object.ValidateTwoDimensialLocation(location);
+
+            Assert.IsFalse(result);
+        }
+
     }
 }
