@@ -67,21 +67,12 @@ namespace LocationTracker.Helpers
             if (firstPairIntersections.Count() != 2 || secondPairIntersections.Count() != 2 || thirdPairIntersections.Count() != 2)
                 return null;
 
-            // FindPairsIntersection method has 2 overloads with 2 different types of handling measurment error
-            // Second type of handling will look at the intersections as at the 'spots' - points with some error radius outside them
-            
-            // From 2 radiuses for each pair the least one will be taken
+            // FindPairsIntersection will look at each intersection as at the 'spot' - points with some error radius outside them
             double firstSpotRadius = (radiusesArray[0] > radiusesArray[1] ? radiusesArray[1] : radiusesArray[0]) * PublicFields.Error / 100;
             double secondSpotRadius = (radiusesArray[1] > radiusesArray[2] ? radiusesArray[2] : radiusesArray[1]) * PublicFields.Error / 100;
             double thirdSpotRadius = (radiusesArray[0] > radiusesArray[2] ? radiusesArray[2] : radiusesArray[0]) * PublicFields.Error / 100;
 
-            // Try to get pairs common point using first method
-            var resultPosition = FindPairsIntersection(firstPairIntersections, secondPairIntersections, error)
-                ?? FindPairsIntersection(firstPairIntersections, thirdPairIntersections, error)
-                ?? FindPairsIntersection(thirdPairIntersections, secondPairIntersections, error)
-
-            // and if there is no result for first type try the second
-                ?? FindPairsIntersection(firstPairIntersections, secondPairIntersections, thirdPairIntersections, firstSpotRadius, secondSpotRadius, thirdSpotRadius);
+            var resultPosition = FindPairsIntersection(firstPairIntersections, secondPairIntersections, thirdPairIntersections, firstSpotRadius, secondSpotRadius, thirdSpotRadius);
 
             return resultPosition;
         }
@@ -96,71 +87,27 @@ namespace LocationTracker.Helpers
             {
                 foreach (var secondPoint in secondPairIntersections)
                 {
-                    bool firstAndSecondAreIntersect = TwoCirclesIntersection(firstPoint, secondPoint, firstSpotRadius, secondSpotRadius).Count() == 2;
-                    if (firstAndSecondAreIntersect)
+                    foreach (var thirdPoint in thirdPairIntersections)
                     {
-                        foreach (var thirdPoint in thirdPairIntersections)
+                        bool firstAndSecondAreIntersect = TwoCirclesIntersection(firstPoint, secondPoint, firstSpotRadius, secondSpotRadius).Count() == 2;
+                        if (firstAndSecondAreIntersect)
                         {
-                            bool firstAndThirdAreIntersect = TwoCirclesIntersection(firstPoint, thirdPoint, firstSpotRadius, thirdSpotRadius).Count() == 2;
-                            bool secondAndThirdAreIntersect = TwoCirclesIntersection(secondPoint, thirdPoint, secondSpotRadius, thirdSpotRadius).Count() == 2;
-                            if (firstAndThirdAreIntersect && secondAndThirdAreIntersect)
-                            {
-                                return firstPoint;
-                            }
+                            return firstPoint;
+                        }
+
+                        bool firstAndThirdAreIntersect = TwoCirclesIntersection(firstPoint, thirdPoint, firstSpotRadius, thirdSpotRadius).Count() == 2;
+                        if (firstAndThirdAreIntersect)
+                        {
+                            return firstPoint;
+                        }
+
+                        bool secondAndThirdAreIntersect = TwoCirclesIntersection(secondPoint, thirdPoint, secondSpotRadius, thirdSpotRadius).Count() == 2;
+                        if (secondAndThirdAreIntersect)
+                        {
+                            return secondPoint;
                         }
                     }
-                }
-            }
 
-            return null;
-        }
-
-        /// <summary>
-        /// Finds common points for intersection when each intersection presented as squares with center at the intersection and +- (error*Position) at the each axis
-        /// </summary>
-        protected virtual TwoDimensialPoint FindPairsIntersection(IEnumerable<TwoDimensialPoint> firstPairIntersections, IEnumerable<TwoDimensialPoint> secondPairIntersections, int error)
-        {
-            if (error == 0)
-            {
-                return firstPairIntersections.FirstOrDefault(i => secondPairIntersections.Contains(i));
-            }
-
-            var firstPointsExtremums = new List<(TwoDimensialPoint Point, List<double> Extremums)>();
-            var secondPointsExtremums = new List<(TwoDimensialPoint Point, List<double> Extremums)>();
-
-            firstPairIntersections.ToList().ForEach(p => firstPointsExtremums.Add((p, new List<double>
-            {
-                p.XPosition - Math.Abs(p.XPosition * error / 100),
-                p.XPosition + Math.Abs(p.XPosition * error / 100),
-                p.YPosition - Math.Abs(p.YPosition * error / 100),
-                p.YPosition + Math.Abs(p.YPosition * error / 100)
-            })));
-
-            secondPairIntersections.ToList().ForEach(p => secondPointsExtremums.Add((p, new List<double>
-            {
-                p.XPosition - Math.Abs(p.XPosition * error / 100),
-                p.XPosition + Math.Abs(p.XPosition * error / 100),
-                p.YPosition - Math.Abs(p.YPosition * error / 100),
-                p.YPosition + Math.Abs(p.YPosition * error / 100)
-            })));
-
-            // If one of the minimum/maximum values from first pair lies between minimum  
-            foreach (var firstPairPoint in firstPointsExtremums)
-            {
-                foreach (var secondPairPoint in secondPointsExtremums)
-                {
-                    bool xPositionsAreIntersect =
-                        (firstPairPoint.Extremums[0] >= secondPairPoint.Extremums[0] && firstPairPoint.Extremums[0] <= secondPairPoint.Extremums[1])
-                        || (firstPairPoint.Extremums[1] >= secondPairPoint.Extremums[0] && firstPairPoint.Extremums[1] <= secondPairPoint.Extremums[1]);
-
-                    bool yPositionsAreIntersect =
-                        (firstPairPoint.Extremums[2] >= secondPairPoint.Extremums[2] && firstPairPoint.Extremums[2] <= secondPairPoint.Extremums[3])
-                        || (firstPairPoint.Extremums[3] >= secondPairPoint.Extremums[2] && firstPairPoint.Extremums[3] <= secondPairPoint.Extremums[3]);
-
-                    if (xPositionsAreIntersect && yPositionsAreIntersect)
-                    {
-                        return firstPairPoint.Point;
-                    }
                 }
             }
 

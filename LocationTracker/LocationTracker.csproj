@@ -66,6 +66,7 @@
     <Compile Include="Contracts\Interfaces\ILocationValidator.cs" />
     <Compile Include="Contracts\Interfaces\IPathsValidator.cs" />
     <Compile Include="Contracts\Interfaces\IValidator.cs" />
+    <Compile Include="Contracts\ThreeDimensialPoint.cs" />
     <Compile Include="Helpers\ConvertingHelper.cs" />
     <Compile Include="Helpers\Extesnsions\DoubleSquareExtension.cs" />
     <Compile Include="Helpers\Extesnsions\StringBuilderTrim.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="Contracts\Interfaces\IPoint.cs" />
     <Compile Include="Contracts\Interfaces\ITracker.cs" />
     <Compile Include="Contracts\Interfaces\ITrackerFactory.cs" />
-    <Compile Include="Contracts\Point.cs" />
+    <Compile Include="Contracts\TwoDimensialPoint.cs" />
     <Compile Include="Contracts\Enums\TrackerTypes.cs" />
   </ItemGroup>
   <ItemGroup>
