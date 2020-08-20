@@ -33,6 +33,15 @@ namespace LocationTracker.Contracts
         }
 
         /// <summary>
+        /// ctor
+        /// </summary>
+        public TwoDimensialPoint(double x, double y)
+        {
+            XPosition = x;
+            YPosition = y;
+        }
+
+        /// <summary>
         /// Gets TwoDimensialPoint's location as string
         /// Sets XPosition and YPosition if they are presented correctly as a string
         /// </summary>

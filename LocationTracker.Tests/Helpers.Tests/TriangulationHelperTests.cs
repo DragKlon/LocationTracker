@@ -133,5 +133,80 @@ namespace LocationTracker.Tests
 
             Assert.IsTrue(result.Count() == 0);
         }
+
+        [TestMethod]
+        public void FindPairsIntersection_FirstAndSecondPairsIntersect_ReturnsFirstPairsFirstPoint()
+        {
+            double firstSpotRadius = 3;
+            double secondSpotRadius = 4;
+            double thirdSpotRadius = 5;
+            var firstPairFirstPoint = new TwoDimensialPoint(1.1, 1.1);
+            var firstPairSecondPoint = new TwoDimensialPoint(1.2, 1.2);
+            var secondPairFirstPoint = new TwoDimensialPoint(2.1, 2.1);
+            var secondPairSecondPoint = new TwoDimensialPoint(2.2, 2.2);
+            var thirdPairFirstPoint = new TwoDimensialPoint(3.1, 3.1);
+            var thirdPairSecondPoint = new TwoDimensialPoint(3.2, 3.2);
+            var firstPair = new List<TwoDimensialPoint> { firstPairFirstPoint, firstPairSecondPoint };
+            var secondPair = new List<TwoDimensialPoint> { secondPairFirstPoint, secondPairSecondPoint };
+            var thirdPair = new List<TwoDimensialPoint> { thirdPairFirstPoint, thirdPairSecondPoint };
+            subject.Setup(m => m.TwoCirclesIntersection(firstPairFirstPoint, secondPairFirstPoint, firstSpotRadius, secondSpotRadius))
+                .Returns(new List<TwoDimensialPoint> { new TwoDimensialPoint(), new TwoDimensialPoint() });
+
+            var result = subject.Object.FindPairsIntersection(firstPair, secondPair, thirdPair, firstSpotRadius, secondSpotRadius, thirdSpotRadius);
+
+            Assert.AreEqual(firstPairFirstPoint, result);
+        }
+
+        [TestMethod]
+        public void FindPairsIntersection_FirstAndThirdPairsIntersect_ReturnsFirstPairsFirstPoint()
+        {
+            double firstSpotRadius = 3;
+            double secondSpotRadius = 4;
+            double thirdSpotRadius = 5;
+            var firstPairFirstPoint = new TwoDimensialPoint(1.1, 1.1);
+            var firstPairSecondPoint = new TwoDimensialPoint(1.2, 1.2);
+            var secondPairFirstPoint = new TwoDimensialPoint(2.1, 2.1);
+            var secondPairSecondPoint = new TwoDimensialPoint(2.2, 2.2);
+            var thirdPairFirstPoint = new TwoDimensialPoint(3.1, 3.1);
+            var thirdPairSecondPoint = new TwoDimensialPoint(3.2, 3.2);
+            var firstPair = new List<TwoDimensialPoint> { firstPairFirstPoint, firstPairSecondPoint };
+            var secondPair = new List<TwoDimensialPoint> { secondPairFirstPoint, secondPairSecondPoint };
+            var thirdPair = new List<TwoDimensialPoint> { thirdPairFirstPoint, thirdPairSecondPoint };
+            subject.Setup(m => m.TwoCirclesIntersection(firstPairFirstPoint, secondPairFirstPoint, firstSpotRadius, secondSpotRadius))
+                .Returns(new List<TwoDimensialPoint>());
+            subject.Setup(m => m.TwoCirclesIntersection(firstPairFirstPoint, thirdPairFirstPoint, firstSpotRadius, thirdSpotRadius))
+                .Returns(new List<TwoDimensialPoint> { new TwoDimensialPoint(), new TwoDimensialPoint() });
+
+            var result = subject.Object.FindPairsIntersection(firstPair, secondPair, thirdPair, firstSpotRadius, secondSpotRadius, thirdSpotRadius);
+
+            Assert.AreEqual(firstPairFirstPoint, result);
+        }
+
+        [TestMethod]
+        public void FindPairsIntersection_SecondAndThirdPairsIntersect_ReturnsSecondPairsFirstPoint()
+        {
+            double firstSpotRadius = 3;
+            double secondSpotRadius = 4;
+            double thirdSpotRadius = 5;
+            var firstPairFirstPoint = new TwoDimensialPoint(1.1, 1.1);
+            var firstPairSecondPoint = new TwoDimensialPoint(1.2, 1.2);
+            var secondPairFirstPoint = new TwoDimensialPoint(2.1, 2.1);
+            var secondPairSecondPoint = new TwoDimensialPoint(2.2, 2.2);
+            var thirdPairFirstPoint = new TwoDimensialPoint(3.1, 3.1);
+            var thirdPairSecondPoint = new TwoDimensialPoint(3.2, 3.2);
+            var firstPair = new List<TwoDimensialPoint> { firstPairFirstPoint, firstPairSecondPoint };
+            var secondPair = new List<TwoDimensialPoint> { secondPairFirstPoint, secondPairSecondPoint };
+            var thirdPair = new List<TwoDimensialPoint> { thirdPairFirstPoint, thirdPairSecondPoint };
+            subject.Setup(m => m.TwoCirclesIntersection(firstPairFirstPoint, secondPairFirstPoint, firstSpotRadius, secondSpotRadius))
+                .Returns(new List<TwoDimensialPoint>());
+            subject.Setup(m => m.TwoCirclesIntersection(firstPairFirstPoint, thirdPairFirstPoint, firstSpotRadius, thirdSpotRadius))
+                .Returns(new List<TwoDimensialPoint>());
+            subject.Setup(m => m.TwoCirclesIntersection(secondPairFirstPoint, thirdPairFirstPoint, secondSpotRadius, thirdSpotRadius))
+                .Returns(new List<TwoDimensialPoint> { new TwoDimensialPoint(), new TwoDimensialPoint() });
+
+            var result = subject.Object.FindPairsIntersection(firstPair, secondPair, thirdPair, firstSpotRadius, secondSpotRadius, thirdSpotRadius);
+
+            Assert.AreEqual(secondPairFirstPoint, result);
+        }
     }
 }
