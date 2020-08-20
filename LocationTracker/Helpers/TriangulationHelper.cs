@@ -243,15 +243,15 @@ namespace LocationTracker.Helpers
             double r2Maximum = r2 + r2 * error / 100;
 
             var resultIntersections = TwoCirclesIntersection(firstCenter, secondCenter, r1Minimum, r2Minimum);
-            if (resultIntersections.Count() != 0)
+            if (resultIntersections.Count() == 2)
                 return resultIntersections;
 
             resultIntersections = TwoCirclesIntersection(firstCenter, secondCenter, r1Minimum, r2Maximum);
-            if (resultIntersections.Count() != 0)
+            if (resultIntersections.Count() == 2)
                 return resultIntersections;
 
             resultIntersections = TwoCirclesIntersection(firstCenter, secondCenter, r1Maximum, r2Minimum);
-            if (resultIntersections.Count() != 0)
+            if (resultIntersections.Count() == 2)
                 return resultIntersections;
 
             resultIntersections = TwoCirclesIntersection(firstCenter, secondCenter, r1Maximum, r2Maximum);

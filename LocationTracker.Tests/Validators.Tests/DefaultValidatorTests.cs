@@ -188,7 +188,7 @@ namespace LocationTracker.Tests
         {
             bool twoDimensialValidationResult = true;
             string location = "location";
-            subject.Setup(m => m.ValidateTwoDimensialLocation(location)).Returns(twoDimensialValidationResult);
+            subject.Setup(m => m.ValidateTwoDimensialInputFile(location)).Returns(twoDimensialValidationResult);
 
             var result = subject.Object.ValidateInputFile(location);
 

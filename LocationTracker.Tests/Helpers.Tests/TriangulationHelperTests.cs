@@ -16,7 +16,7 @@ namespace LocationTracker.Tests
         [TestInitialize]
         public void Initialise()
         {
-            subject = new Mock<TriangulationHelperTests>();
+            subject = new Mock<TriangulationHelperTests> { CallBase = true };
         }
 
         [TestMethod]
@@ -69,9 +69,9 @@ namespace LocationTracker.Tests
         public void GetPosition_TwoDimensialReceivers_ReturnsGetTwoDimensialPositionResult()
         {
             var getTwoDimensialPositionResultPoint = new TwoDimensialPoint();
-            var receivers = new List<IPoint> { new TwoDimensialPoint(), new TwoDimensialPoint(), new TwoDimensialPoint() };
+            var receivers = new List<TwoDimensialPoint> { new TwoDimensialPoint(), new TwoDimensialPoint(), new TwoDimensialPoint() };
             var propogationTimes = new List<double>();
-            subject.Setup(m => m.GetTwoDimensialPosition(receivers.OfType<TwoDimensialPoint>(), propogationTimes, 0)).Returns(getTwoDimensialPositionResultPoint);
+            subject.Setup(m => m.GetTwoDimensialPosition(receivers, propogationTimes, 0)).Returns(getTwoDimensialPositionResultPoint);
 
             var result = subject.Object.GetPosition(receivers, propogationTimes);
 
@@ -87,6 +87,51 @@ namespace LocationTracker.Tests
             var result = subject.Object.GetPosition(receivers, propogationTimes);
 
             Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void TwoCirclesIntersection_WithErrorHandlingIntersectionsExists_ReturnsPointsCollection()
+        {
+            double firstRadius = 3;
+            double secondRadius = 4;
+            int error = 5;
+            var firstCenter = new TwoDimensialPoint { XPosition = 1, YPosition = 2 };
+            var secondCenter = new TwoDimensialPoint { XPosition = 4, YPosition = 8 };
+            var intersections = new List<TwoDimensialPoint> { new TwoDimensialPoint(), new TwoDimensialPoint() };
+            double r1Minimum = firstRadius - firstRadius * error / 100;
+            double r2Minimum = secondRadius - secondRadius * error / 100;
+            subject.Setup(m => m.TwoCirclesIntersection(firstCenter, secondCenter, r1Minimum, r2Minimum))
+                .Returns(intersections);
+
+            var result = subject.Object.TwoCirclesIntersection(firstCenter, secondCenter, firstRadius, secondRadius, error);
+
+            Assert.AreEqual(intersections, result);
+        }
+
+        [TestMethod]
+        public void TwoCirclesIntersection_NoIntersectionsWithErrorHandling_ReturnsEmptyCollection()
+        {
+            double firstRadius = 3;
+            double secondRadius = 4;
+            int error = 5;
+            var firstCenter = new TwoDimensialPoint { XPosition = 1, YPosition = 2 };
+            var secondCenter = new TwoDimensialPoint { XPosition = 4, YPosition = 8 };
+            double r1Minimum = firstRadius - firstRadius * error / 100;
+            double r1Maximum = firstRadius + firstRadius * error / 100;
+            double r2Minimum = secondRadius - secondRadius * error / 100;
+            double r2Maximum = secondRadius + secondRadius * error / 100;
+            subject.Setup(m => m.TwoCirclesIntersection(firstCenter, secondCenter, r1Minimum, r2Minimum))
+                .Returns(new List<TwoDimensialPoint>());
+            subject.Setup(m => m.TwoCirclesIntersection(firstCenter, secondCenter, r1Minimum, r2Maximum))
+                .Returns(new List<TwoDimensialPoint>());
+            subject.Setup(m => m.TwoCirclesIntersection(firstCenter, secondCenter, r1Maximum, r2Minimum))
+                .Returns(new List<TwoDimensialPoint>());
+            subject.Setup(m => m.TwoCirclesIntersection(firstCenter, secondCenter, r1Maximum, r2Maximum))
+                .Returns(new List<TwoDimensialPoint>());
+
+            var result = subject.Object.TwoCirclesIntersection(firstCenter, secondCenter, firstRadius, secondRadius, error);
+
+            Assert.IsTrue(result.Count() == 0);
         }
     }
 }
